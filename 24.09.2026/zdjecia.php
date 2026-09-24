@@ -6,10 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="index.php">
-        <label><img src="1.jpg" alt="kot1" width="200px"><input type="radio" name="zdjecie" id="1"></label> <br>
-        <label><img src="2.jpg" alt="kot2" width="200px"><input type="radio" name="zdjecie" id="2"></label> <br>
-        <label><img src="3.jpg" alt="kot3" width="200px"><input type="radio" name="zdjecie" id="3z"></label> <br>
+    <form action="index.php" method="get">
+        <?php 
+        
+        $dir = "./";
+        $pliki = scandir($dir);
+        var_dump($pliki);
+        
+        ?>
+        <label><img src="1.jpg" alt="kot 1" width="100px"><input type="radio" name="zdjecie" value="1" id="zdjecie"></label> <br>
+        <label><img src="2.jpg" alt="kot 2" width="100px"><input type="radio" name="zdjecie" value="2" id="zdjecie"></label> <br>
+        <label><img src="3.jpg" alt="kot 3" width="100px"><input type="radio" name="zdjecie" value="3" id="zdjecie"></label> <br>
         <input type="submit" value="Ustaw">
     </form>
 </body>
