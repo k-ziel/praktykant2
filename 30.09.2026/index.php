@@ -26,7 +26,7 @@ if(isset($_POST['login'])) {
     if(isset($_POST['pass'])) {
         $password = $_POST['pass'];
 
-        if($login=='franek' && $password='ser') {
+        if($login=='franek' && $password=='ser') {
             $_SESSION['zalogowano'] = True;
             header('Location: main.php');
         } else {
