@@ -12,12 +12,31 @@ session_start()
     <title>Document</title>
 </head>
 <body>
-    
+
+<form method="post">
+    <label>Login <input type="text" name="login"></label> <br>
+    <label>Hasło <input type="password" name="pass"></label> <br>
+    <input type="submit" value="Zaloguj się">
+</form>
+
 <?php
 
-var_dump($_COOKIE);
+if(isset($_POST['login'])) {
+    $login = $_POST['login'];
+    if(isset($_POST['pass'])) {
+        $password = $_POST['pass'];
 
-var_dump($_SESSION);
+        if($login=='franek' && $password='ser') {
+            $_SESSION['zalogowano'] = True;
+            header('Location: main.php');
+        } else {
+            echo("Wprowadzono niepoprawny login lub/i hasło");
+        }
+
+    } else {
+        echo("wprowadz haslo!");
+    }
+}
 
 ?>
 
