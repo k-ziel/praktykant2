@@ -21,6 +21,12 @@ session_start()
 
 <?php
 
+if(isset($_SESSION['zalogowano'])) {
+    if($_SESSION['zalogowano'] == True) {
+        header('Location: main.php');
+    }
+}
+
 if(isset($_POST['login'])) {
     $login = $_POST['login'];
     if(isset($_POST['pass'])) {

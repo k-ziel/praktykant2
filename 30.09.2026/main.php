@@ -12,21 +12,17 @@ session_start()
     <title>Document</title>
 </head>
 <body>
+<form method="post" action="logout.php">
+    <input type="submit" value="Wyloguj się">
+</form>
+
+
     <?php
     
     // var_dump($_SESSION);
 
     if($_SESSION['zalogowano'] == True) {
         echo("czesc");
-        echo("<form method='post'>");
-        echo("<input type='submit' value='Wyloguj się' name='logout'>");
-        echo("</form>");
-
-        if(isset($_POST["logout"])) {
-            session_destroy();
-            setcookie("PHPSESSID", "hihihi", time()-10);
-            header('Location: index.php');
-        }
 
     } else {
         header('Location: index.php');
