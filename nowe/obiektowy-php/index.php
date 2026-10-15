@@ -6,43 +6,45 @@
     <title>Document</title>
 </head>
 <body>
-    <?php
     
-    class Samochud {
-        public $marka;
-        public $licznik;
+<?php 
 
-        function jedz($ile) {
-            $this->licznik += $ile;
-        }
-        function cofaj($ile) {
-            $this->licznik -= $ile;
-        }
-        function przedstawSie() {
-            echo("Cześć, jestem $this->marka. Na liczniku mam $this->licznik");
-        }
+class Prostokat {
+    public $a;
+    public $b;
+
+    function __construct($a=0, $b=0) {
+        $this->a = $a;
+        $this->b = $b;
+        // echo("pomyslnie utworzono prostokat o $a, $b");
     }
-    
-    $s1 = new Samochud;
-    $s1->marka="bmw";
-    $s1->licznik=0;
+
+    function __toString() {
+        return "Prostokąt o wymiarach $this->a x $this->b";
+    }
+
+    function obliczPole() {
+        return $this->a * $this->b; 
+    }
 
 
-    $s2 = new Samochud;
-    $s2->marka="mercedes";
-    $s2->licznik=0;
+    function obliczObwod() {
+        return ($this->a + $this->b) * 2; 
+    }
+
+    function obliczPrzekatna() {
+        return round(sqrt(($this->a * $this->a) + ($this->b * $this->b)), 2); 
+    }
+
+}
 
 
-    // echo($s1->licznik."<br>");
-    $s1->jedz(10);
-    $s2->jedz(67);
-    $s2->cofaj(573);
-    // echo($s1->licznik);
-    $s1->przedstawSie();
-    echo("<br>");
-    $s2->przedstawSie();
-    // var_dump($s1);
-    
-    ?>
+$p1 = new Prostokat(3, 4);
+echo $p1->obliczPole()."<br>";
+echo $p1->obliczPrzekatna()."<br>";
+echo $p1->obliczObwod()."<br>";
+
+?>
+
 </body>
 </html>
