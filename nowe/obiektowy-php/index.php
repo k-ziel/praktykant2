@@ -3,48 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ser</title>
+    <title>Document</title>
 </head>
 <body>
-    
-<?php 
+<?php
 
-class Prostokat {
-    public $a;
-    public $b;
+abstract class Figura {
+    protected $opis;
+    protected $nazwa;
+    abstract function pole();
+    function __construct($nazwa, $opis) {
+        $this->nazwa = $nazwa;
+        $this->opis = $opis;
+    }
+}
 
-    function __construct($a=0, $b=0) {
+interface Ruchome {
+    function ruch();
+}
+
+class Kwadrat extends Figura implements Ruchome {
+    private $a;
+    function __construct($nazwa, $opis, $a) {
+        parent::__construct($nazwa, $opis);
         $this->a = $a;
-        $this->b = $b;
-        // echo("pomyslnie utworzono prostokat o $a, $b");
     }
 
     function __toString() {
-        return "Prostokąt o wymiarach $this->a x $this->b";
+        return "$this->nazwa, $this->opis, $this->a<br>";
     }
 
-    function obliczPole() {
-        return $this->a * $this->b; 
+    function pole() {
+        return $this->a * $this->a;
     }
 
-
-    function obliczObwod() {
-        return ($this->a + $this->b) * 2; 
+    function ruch() {
+        return "ser";
     }
-
-    function obliczPrzekatna() {
-        return round(sqrt(($this->a * $this->a) + ($this->b * $this->b)), 2); 
-    }
-
 }
 
+$k1 = new Kwadrat("marek", "polna", 4);
+echo($k1->ruch());
+echo($k1->pole());
 
-$p1 = new Prostokat(3, 4);
-echo $p1->obliczPole()."<br>";
-echo $p1->obliczPrzekatna()."<br>";
-echo $p1->obliczObwod()."<br>";
 
 ?>
-
 </body>
 </html>

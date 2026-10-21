@@ -1,0 +1,7 @@
+public $zmienna = można zmienić wartość poza klasa
+private $zmienna = nie można zmienić poza klasa
+
+hermetyzacja / enkapsulacja= ukrywanie pewnych danych lub metod klasy
+
+klasa abstraktyjna - nie można tworzyć obiektow tej klasy - jest to taki szablon
+funkcja abstrakcyjna - wymusza, ze klasa dziedziczą musi mieć klase pole
