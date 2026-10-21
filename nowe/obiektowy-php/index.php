@@ -38,7 +38,7 @@ class Kwadrat extends Figura implements Ruchome {
     }
 
     function ruch() {
-        return "ser";
+        return "Ruszam się!";
     }
 }
 
