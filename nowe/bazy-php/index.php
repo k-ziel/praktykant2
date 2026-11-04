@@ -17,8 +17,19 @@
             color: white;
             background-color: black;
         }
-        .ser {
+        tr:nth-child(odd) {
             background-color: lightgray;
+        }
+        th{
+            padding: 0px 1em;
+        }
+        tr:hover {
+            background-color: dimgrey;
+            color: white
+        }
+        td:hover {
+            background-color: black;
+            color: white;
         }
     </style>
 </head>
@@ -31,32 +42,36 @@ $pass = "";
 $db = "4ti_g2_samochody";
 
 $conn = mysqli_connect($host, $user, $pass, $db);
-$sql = "SELECT * FROM `samochody`;";
+$sql = "SELECT uslugi.usluga, COUNT(wykonane.id_uslugi) as 'iw', SUM(uslugi.cena) as 'zarobek' FROM uslugi INNER JOIN wykonane USING(id_uslugi) GROUP BY uslugi.id_uslugi ORDER BY zarobek DESC;";
 $result = mysqli_query($conn, $sql);
 if(mysqli_num_rows($result) == 0) {
     echo("Brak danych");
 } else {
     echo("<table>\n");
     echo("<tr>");
-    echo("<th>Nr. rejestr.</th>");
-    echo("<th>Marka</th>");
-    echo("<th>Rok prod.</th>");
+    echo("<th>Usługa</th>");
+    echo("<th>Ile wykonano</th>");
+    echo("<th>Zarobek</th>");
+    echo("<th>Zar. / Wykonano</th>");
     echo("</tr>\n");
     $licznik = 0;
     while($row = mysqli_fetch_assoc($result)) {
-        if($licznik%2 == 1) {
-            echo("<tr class='ser'>");
-        } else {
-            echo("<tr>");
-        }
-        echo("<td>{$row['nr_rejestracyjny']}</td>");
-        echo("<td>".ucfirst($row['marka'])."</td>");
-        echo("<td>{$row['rok_produkcji']}</td>");
+        // if($licznik%2 == 1) {
+            // echo("<tr class='ser'>");
+        // } else {
+        echo("<tr>");
+        // }
+        echo("<td>".ucfirst($row['usluga'])."</td>");
+        echo("<td>{$row['iw']}</td>");
+        echo("<td>".number_format($row['zarobek'], 2, ",", " ")." zł</td>");
+        echo("<td>". $row['zarobek'] / $row['iw'] ." zł</td>");
         echo("</tr>\n");
-        $licznik++;
+        // $licznik++;
     }
     echo("</table>\n");
 }
+
+
 
 mysqli_close($conn);
 
