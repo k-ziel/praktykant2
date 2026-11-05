@@ -24,17 +24,54 @@
             padding: 0px 1em;
         }
         tr:hover {
-            background-color: dimgrey;
+            background-color: DimGrey;
             color: white
         }
         td:hover {
             background-color: black;
             color: white;
         }
+        table {
+            margin: auto
+        }
     </style>
 </head>
 <body>
+
+<?php 
+
+if(isset($_POST["marka"])) {
+    $marka = $_POST["marka"];
+    if($marka == "") {
+        $marka="%";
+    } 
+} else {
+    $marka="%";
+}
+
+$sql = "SELECT\n"
+. "    samochody.nr_rejestracyjny,\n"
+. "    samochody.marka,\n"
+. "    samochody.rok_produkcji,\n"
+. "    COUNT(wykonane.id_uslugi) AS \"iwu\"\n"
+. "FROM\n"
+. "    samochody\n"
+. "INNER JOIN wykonane USING(nr_rejestracyjny)\n"
+. "WHERE samochody.marka LIKE '$marka'\n"
+. "GROUP BY\n"
+. "    samochody.nr_rejestracyjny;";
+
+?>
+
+<form method="post">
+<label>Wprowadź markę<input type="text" name="marka"></label>
+<input type="submit" value="Wybierz">
+</form>
+
+<hr>
+
 <?php
+
 
 $host = "localhost";
 $user = "root";
@@ -42,17 +79,16 @@ $pass = "";
 $db = "4ti_g2_samochody";
 
 $conn = mysqli_connect($host, $user, $pass, $db);
-$sql = "SELECT uslugi.usluga, COUNT(wykonane.id_uslugi) as 'iw', SUM(uslugi.cena) as 'zarobek' FROM uslugi INNER JOIN wykonane USING(id_uslugi) GROUP BY uslugi.id_uslugi ORDER BY zarobek DESC;";
 $result = mysqli_query($conn, $sql);
 if(mysqli_num_rows($result) == 0) {
     echo("Brak danych");
 } else {
     echo("<table>\n");
     echo("<tr>");
-    echo("<th>Usługa</th>");
-    echo("<th>Ile wykonano</th>");
-    echo("<th>Zarobek</th>");
-    echo("<th>Zar. / Wykonano</th>");
+    echo("<th>Nr. rejestr.</th>");
+    echo("<th>Marka</th>");
+    echo("<th>Rok prod.</th>");
+    echo("<th>Ilość wyk. usług</th>");
     echo("</tr>\n");
     $licznik = 0;
     while($row = mysqli_fetch_assoc($result)) {
@@ -61,17 +97,15 @@ if(mysqli_num_rows($result) == 0) {
         // } else {
         echo("<tr>");
         // }
-        echo("<td>".ucfirst($row['usluga'])."</td>");
-        echo("<td>{$row['iw']}</td>");
-        echo("<td>".number_format($row['zarobek'], 2, ",", " ")." zł</td>");
-        echo("<td>". $row['zarobek'] / $row['iw'] ." zł</td>");
+        echo("<td>{$row['nr_rejestracyjny']}</td>");
+        echo("<td>".ucfirst($row['marka'])."</td>");
+        echo("<td>{$row['rok_produkcji']}</td>");
+        echo("<td>{$row['iwu']}</td>");
         echo("</tr>\n");
-        // $licznik++;
+        $licznik++;
     }
     echo("</table>\n");
 }
-
-
 
 mysqli_close($conn);
 
