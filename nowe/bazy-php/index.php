@@ -40,14 +40,64 @@
 
 <?php 
 
-if(isset($_POST["marka"])) {
-    $marka = $_POST["marka"];
-    if($marka == "") {
+
+
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "4ti_g2_samochody";
+
+$conn = mysqli_connect($host, $user, $pass, $db);
+
+
+?>
+
+<form method="post">
+<select name="marka">
+<?php 
+
+    if(isset($_POST["marka"])) {
+        $marka = $_POST["marka"];
+        if($marka == "Wszystkie") {
+            $marka="%";
+        } 
+    } else {
         $marka="%";
-    } 
-} else {
-    $marka="%";
-}
+    }
+
+    $sql = "SELECT DISTINCT marka FROM samochody ORDER BY marka;";
+
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) == 0) {
+        echo("Brak danych");
+    } else {
+        echo("<option>Wszystkie</option>");
+        while($row = mysqli_fetch_assoc($result)) {
+            if(strtolower($row['marka']) == strtolower($marka)) {
+                echo("<option selected>");
+            } else {
+                echo("<option>");
+            }
+            echo(ucfirst($row['marka']));
+            echo("</option>\n");
+            }
+    }
+
+
+
+    
+?>
+</select>
+<input type="submit" value="Wybierz">
+</form>
+
+<hr>
+
+<?php
+
+
+
 
 $sql = "SELECT\n"
 . "    samochody.nr_rejestracyjny,\n"
@@ -59,26 +109,8 @@ $sql = "SELECT\n"
 . "INNER JOIN wykonane USING(nr_rejestracyjny)\n"
 . "WHERE samochody.marka LIKE '$marka'\n"
 . "GROUP BY\n"
-. "    samochody.nr_rejestracyjny;";
+. "    samochody.nr_rejestracyjny ORDER BY samochody.marka;";
 
-?>
-
-<form method="post">
-<label>Wprowadź markę<input type="text" name="marka"></label>
-<input type="submit" value="Wybierz">
-</form>
-
-<hr>
-
-<?php
-
-
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db = "4ti_g2_samochody";
-
-$conn = mysqli_connect($host, $user, $pass, $db);
 $result = mysqli_query($conn, $sql);
 if(mysqli_num_rows($result) == 0) {
     echo("Brak danych");
