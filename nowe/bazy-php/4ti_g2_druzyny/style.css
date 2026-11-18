@@ -1,0 +1,31 @@
+table, td, th {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+* {
+    font-family: "Calibri";
+    text-align: center;
+}
+th {
+    color: white;
+    background-color: black;
+    padding: .5em 1em;
+    cursor: pointer;
+}
+tr:nth-child(odd) {
+    background-color: lightgray;
+}
+td {
+    padding: .3em .3em;
+}
+tr:hover {
+    background-color: DimGrey;
+    color: white
+}
+td:hover {
+    background-color: black;
+    color: white;
+}
+table {
+    margin: auto
+}
