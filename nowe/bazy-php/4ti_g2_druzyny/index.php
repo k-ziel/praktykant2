@@ -25,6 +25,9 @@ if($wybrana_druzyna) {
 </head>
 <body>
     <form method="POST">
+        
+        <!-- Dodac do tego jeszcze radio boxy do chyba gdzie grali (W lub D) -->
+
         <label>Drużyna
             <select name="druzyna" onchange="form.submit()">
                 <option>Wszystkie</option>
