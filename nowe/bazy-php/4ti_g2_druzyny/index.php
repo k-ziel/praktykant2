@@ -14,46 +14,96 @@ if($wybrana_druzyna) {
     $druzyna = "%";
 }
 
+$wybrany_sedzia = isset($_POST["sedzia"]) && $_POST['sedzia'] != "Obojętne";
+if($wybrany_sedzia) {
+    $sedziaa = $_POST["sedzia"];
+} else {
+    $sedziaa = "%";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>18.11.2026</title>
+    <title>18.11.2026, 19.11.2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <form method="POST">
-        
-        <!-- Dodac do tego jeszcze radio boxy do chyba gdzie grali (W lub D) -->
-
-        <label>Drużyna
-            <select name="druzyna" onchange="form.submit()">
-                <option>Wszystkie</option>
+        <header>
+            <div>
                 <?php
-                
-                $sql = "SELECT DISTINCT nazwa, id_druzyny FROM druzyny ORDER BY nazwa;";
 
-                $result = mysqli_query($conn, $sql);
-
-                if(mysqli_num_rows($result) == 0) {
-                    echo("Brak drużyn!");
-                } else {
-                    while($row = mysqli_fetch_assoc($result)) {
-                        $druzyny = $row['nazwa'];
-                        $id_druzyna = $row['id_druzyny'];
-                        if($id_druzyna == $druzyna) {
-                            echo("<option value='$id_druzyna' selected>$druzyny</option>\n");
-                        } else {
-                            echo("<option value='$id_druzyna'>$druzyny</option>\n");
-                        }
+                    if(isset($_POST["gdzie"])) {
+                        $gdzie = $_POST["gdzie"];
+                    } else {
+                        $gdzie = "%";
                     }
-                }
                 
                 ?>
-            </select>
-        </label>
+                <label onclick="form.submit()">Wyjazdowy<input type="radio" <?php if($gdzie == "W") {echo("checked");} ?> name="gdzie" value="W"></label>
+                <label onclick="form.submit()">U siebie<input type="radio" <?php if($gdzie == "D") {echo("checked");} ?> name="gdzie" value="D"></label>
+                <label onclick="form.submit()">Obojętnie<input type="radio" <?php if($gdzie == "%") {echo("checked");} ?> name="gdzie" value="%"></label>
+            </div>
+
+            <div>
+                <label>Drużyna
+                    <select name="druzyna" onchange="form.submit()">
+                        <option>Wszystkie</option>
+                        <?php
+                        
+                        $sql = "SELECT DISTINCT nazwa, id_druzyny FROM druzyny ORDER BY nazwa;";
+
+                        $result = mysqli_query($conn, $sql);
+
+                        if(mysqli_num_rows($result) == 0) {
+                            echo("Brak drużyn!");
+                        } else {
+                            while($row = mysqli_fetch_assoc($result)) {
+                                $druzyny = $row['nazwa'];
+                                $id_druzyna = $row['id_druzyny'];
+                                if($id_druzyna == $druzyna) {
+                                    echo("<option value='$id_druzyna' selected>$druzyny</option>\n");
+                                } else {
+                                    echo("<option value='$id_druzyna'>$druzyny</option>\n");
+                                }
+                            }
+                        }
+                        
+                        ?>
+                    </select>
+                </label>
+
+                <label>Sędzia
+                    <select name="sedzia" onchange="form.submit()">
+                        <option>Obojętne</option>
+                        <?php
+                        
+                        $sql = "SELECT DISTINCT imie, nazwisko, nr_licencji FROM sedziowie ORDER BY imie;";
+
+                        $result = mysqli_query($conn, $sql);
+
+                        if(mysqli_num_rows($result) == 0) {
+                            echo("Brak drużyn!");
+                        } else {
+                            while($row = mysqli_fetch_assoc($result)) {
+                                $sedzia = "{$row['imie']} {$row['nazwisko']}";
+                                $id_sedziego = $row['nr_licencji'];
+                                if($id_sedziego == $sedziaa) {
+                                    echo("<option value='$id_sedziego' selected>$sedzia</option>\n");
+                                } else {
+                                    echo("<option value='$id_sedziego'>$sedzia</option>\n");
+                                }
+                            }
+                        }
+                        
+                        ?>
+                    </select>
+                </label>
+            </div>
+        </header>
     </form>
     <hr>
     <table>
@@ -71,12 +121,12 @@ if($wybrana_druzyna) {
         </tr>
         <?php 
 
-        $sql = "SELECT * FROM wyniki JOIN druzyny USING(Id_druzyny) JOIN sedziowie USING(nr_licencji) WHERE druzyny.id_druzyny LIKE '$druzyna' ORDER BY Data_meczu;";
+        $sql = "SELECT * FROM wyniki JOIN druzyny USING(Id_druzyny) JOIN sedziowie USING(nr_licencji) WHERE (druzyny.id_druzyny LIKE '$druzyna') AND (Gdzie LIKE '$gdzie') AND (nr_licencji LIKE '$sedziaa') ORDER BY Data_meczu;";
 
         $result = mysqli_query($conn, $sql);
 
         if(mysqli_num_rows($result) == 0) {
-            echo("Nie ma danych!");
+            $niema = True;
         } else {
             while($row = mysqli_fetch_assoc($result)) {
                 echo("<tr>");
@@ -118,7 +168,21 @@ if($wybrana_druzyna) {
         
         ?>
     </table>
+    <?php 
+    
+    if(isset($niema)) {
+        echo("<span onclick='resett' class='komunikat'>\n");
+        echo("Nie ma danych, zmień wybrane opcje\n");
+        echo("</span>");
+    }
+    
+    ?>
 </body>
+<script>
+    function resett() {
+        document.forms[0].reset()
+    }
+</script>
 </html>
 <?php
 
